@@ -21,3 +21,4 @@ services:
 networks:
   web:
     external:
+      name: web
