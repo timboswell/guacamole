@@ -1,0 +1,23 @@
+version: "3.3"
+services:
+  guacamole:
+    image: oznu/guacamole
+    container_name: guacamole
+    volumes:
+      - ./postgres:/config
+    networks:
+      - web
+    environment:
+      - "EXTENSIONS=auth-header"
+    labels:  
+      - "traefik.http.routers.guacamole.rule=Host(`guacamole.mgmt.sbob.uk`)"
+      - "traefik.http.routers.guacamole.middlewares=auth"
+      - "traefik.http.routers.guacamole.entrypoints=websecure"
+      - "traefik.http.routers.guacamole.tls=true"
+      - "traefik.http.routers.guacamole.tls.certresolver=leresolver"
+      - "traefik.http.middlewares.authtraefik.basicauth.usersfile=/common/usersfile"
+      - "traefik.http.middlewares.authtraefik.basicauth.headerField=REMOTE_USER"
+      
+networks:
+  web:
+    external:
